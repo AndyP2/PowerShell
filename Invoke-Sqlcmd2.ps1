@@ -449,7 +449,7 @@
             }
 
             #Following EventHandler is used for PRINT and RAISERROR T-SQL statements. Executed when -Verbose parameter specified by caller
-            if ($PSBoundParameters.Verbose)
+            if ($PSBoundParameters.ContainsKey('Verbose') -and $PSBoundParameters.Verbose)
             {
                 $conn.FireInfoMessageEventOnUserErrors=$false # Shiyang, $true will change the SQL exception to information
                 $handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] { Write-Verbose "$($_)" }
@@ -542,7 +542,10 @@
                 }
                 'DataRow'
                 {
-                    $ds.Tables[0]
+                    if($ds.Tables.Count -ne 0)
+                    {
+                        $ds.Tables[0]
+                    }
                 }
                 'PSObject'
                 {
